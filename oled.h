@@ -45,3 +45,5 @@ void Draw_Circle(char x0,char y0,char r,int colour,char time,bit time_mode);
 void Draw_Line(int x1,int y1,int x2,int y2,int color);
 void Draw_Triangle(int x,int y,int r,int color);
 void Display_Pattern(unsigned char *Pattern_Data, unsigned char Start_x, unsigned char End_x, unsigned char Start_y, unsigned char End_y);
+void Display_Char(unsigned char x, unsigned char y, unsigned char Var_Char, int Colour_RGB);
+void Display_String(unsigned char x, unsigned char y, unsigned char *chr, int Colour_RGB);

@@ -1,5 +1,6 @@
 #include "oled.h"
 #include "STC8.h"
+#include "font.h"
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//
 //引脚定义
 sbit SCLK=	P2^4;
@@ -687,4 +688,57 @@ void Display_Pattern(unsigned char *Pattern_Data, unsigned char Start_x, unsigne
 			Data_Pointer++;
 		}
 	}
+}
+/**
+  * @函数名       display_char
+  * @功  能       指定坐标画一个字符（逐行式），字符大小固定为8*16
+  * @参  数       x：列起始地址；y：行起始地址；Var_Char：写入的字符；Colour_RGB：填充颜色：RRRRRGGGGGGBBBBB
+  * @返回值       无
+  */
+void Display_Char(unsigned char x, unsigned char y, unsigned char Var_Char, int Colour_RGB)
+{
+  unsigned char i, j; //定义变量
+  unsigned char Var_Temp, x_Temp; //定义变量
+
+  x_Temp = x; //获取x起始坐标
+  for (i = 0; i < 16; i++)
+  {
+    Var_Temp = ACSII_Font[Var_Char - 0x20][i];  //获取字符在数组的偏移量
+    for ( j = 0; j < 8; j++)
+    {
+      if (Var_Temp & 0x80)  //先画最高位的点，为1则画对应的颜色
+        Draw_Point(x, y, Colour_RGB);
+      //else
+        //Draw_Point(x, y, 0x0000); //为0则黑色（都不亮），可作为背景色
+
+      Var_Temp <<= 1; //移位，准备画下一个点
+      x++;  //x坐标加1
+
+      if((x - x_Temp) == 8)
+      { 
+        x = x_Temp; //x坐标回到起始位置
+        y++;  //y坐标加1
+        break;  //退出当前循环
+      }
+    }
+  }
+}
+
+
+/**
+  * @函数名       Display_String
+  * @功  能       显示字符串
+  * @参  数       x：列起始地址；y：行起始地址；*chr：显示的字符串；Colour_RGB：填充颜色：RRRRRGGGGGGBBBBB
+  * @返回值       无
+  */
+void Display_String(unsigned char x, unsigned char y, unsigned char *chr, int Colour_RGB)
+{
+  unsigned char i = 0;  //定义变量
+
+  while(chr[i] != '\0') //判断是否结束
+  {
+    Display_Char(x, y, chr[i], Colour_RGB); //显示字符
+    x += 8; //x坐标加8（一个字符x方向占8个点，Y方向占16个点）
+    i++;  //下一个字符
+  }
 }
