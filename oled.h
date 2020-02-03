@@ -39,7 +39,7 @@ void Sleep(unsigned char a);
 void Set_Gray_Scale_Table();
 void Set_Linear_Gray_Scale_Table();
 void OLED_Init();
-void Draw_Rectangle(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, unsigned char f, unsigned char g);
+void Draw_Rectangle(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int Colour_RGB);
 void Draw_Point(unsigned char x, unsigned char y, int Colour_RGB);
 void Draw_Circle(char x0,char y0,char r,int colour,char time,bit time_mode);
 void Draw_Line(int x1,int y1,int x2,int y2,int color);

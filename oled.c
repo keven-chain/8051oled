@@ -512,7 +512,7 @@ void OLED_Init()
 //    e:线的宽度
 //    d:设颜色
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void Draw_Rectangle(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, unsigned char f, unsigned char g)
+void Draw_Rectangle(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int Colour_RGB)
 {
 unsigned char i,j;
 
@@ -523,8 +523,8 @@ unsigned char i,j;
 	{
 		for(j=0;j<e;j++)
 		{
-			Write_Data(f);
-			Write_Data(g);
+	Write_Data(Colour_RGB >> 8); //写入填充颜色高字节
+  Write_Data(Colour_RGB);  //写入填充颜色低字节
 		}
 	}
 
@@ -535,8 +535,8 @@ unsigned char i,j;
 	{
 		for(j=0;j<e;j++)
 		{
-			Write_Data(f);
-			Write_Data(g);
+		Write_Data(Colour_RGB >> 8); //写入填充颜色高字节
+		Write_Data(Colour_RGB);  //写入填充颜色低字节
 		}
 	}
 
@@ -547,8 +547,8 @@ unsigned char i,j;
 	{
 		for(j=0;j<e;j++)
 		{
-			Write_Data(f);
-			Write_Data(g);
+		Write_Data(Colour_RGB >> 8); //写入填充颜色高字节
+  Write_Data(Colour_RGB);  //写入填充颜色低字节
 		}
 	}
 
@@ -559,8 +559,8 @@ unsigned char i,j;
 	{
 		for(j=0;j<e;j++)
 		{
-			Write_Data(f);
-			Write_Data(g);		
+			Write_Data(Colour_RGB >> 8); //写入填充颜色高字节
+			Write_Data(Colour_RGB);  //写入填充颜色低字节		
 		}
 	}
 }
