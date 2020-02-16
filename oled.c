@@ -3,10 +3,10 @@
 #include "font.h"
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//
 //引脚定义
-sbit SCLK=	P2^4;
-sbit SDIN=	P2^5;	
+sbit SCLK=	P3^0;
+sbit SDIN=	P3^2;	
 sbit RES=	P3^4	;	
-sbit CS	=P3^5		;
+sbit CS	=P4^1		;
 sbit DC=	P3^6	;	
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // 延迟函数
@@ -31,6 +31,34 @@ unsigned char i,j,k;
 			}
 		}
 	}
+}
+
+void mDelay(char time)
+{
+while(time--)
+{
+
+	unsigned char i, j;
+
+	i = 3;
+	j = 82;
+	do
+	{
+		while (--j);
+	} while (--i);
+}
+}
+
+void kDelay(unsigned char n)
+{
+unsigned char i,j;
+		for(i=0;i<5;i++)
+		{
+			for(j=0;j<5;j++)
+			{
+				mDelay(n);	
+			}
+		}
 }
 //******************************************************************************//
 //函数功能：写命令
@@ -227,7 +255,7 @@ void Set_Command_Lock(unsigned char d)
 //    a: RRRRRGGG
 //    b: GGGBBBBB
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void Fill_RAM(unsigned char a, unsigned char b)
+void Fill_RAM(int Colour_RGB)
 {
 unsigned char i,j;
 
@@ -239,8 +267,8 @@ unsigned char i,j;
 	{
 		for(j=0;j<128;j++)
 		{
-			Write_Data(a);
-			Write_Data(b);
+		Write_Data(Colour_RGB >> 8); //写入填充颜色高字节
+		Write_Data(Colour_RGB);  //写入填充颜色低字节
 		}
 	}
 }
@@ -344,32 +372,31 @@ void Deactivate_Scroll()
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // 淡入
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void Fade_In()
+void Fade_In(bit time_mode,long time)
 {
 unsigned int i;	
-
+char b=time;
+	char c;
 	Set_Display_On_Off(0x01);
 	for(i=0;i<(Brightness+1);i++)
 	{
 		Set_Master_Current(i);
-		uDelay(200);
-		uDelay(200);
-		uDelay(200);
+		if(time_mode) Delay(time);
+		else kDelay(time);
 	}
 }
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //  淡出
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void Fade_Out()
+void Fade_Out(bit time_mode,char time)
 {
 unsigned int i;	
 
 	for(i=(Brightness+1);i>0;i--)
 	{
 		Set_Master_Current(i-1);
-		uDelay(200);
-		uDelay(200);
-		uDelay(200);
+		if(time_mode) Delay(time);
+		else mDelay(time);
 	}
 	Set_Display_On_Off(0x00);
 }
@@ -500,7 +527,7 @@ void OLED_Init()
 	Set_Precharge_Period(0x01);	
 	Set_VCOMH(0x05);	
 	Set_Display_Mode(0x02);		
-	Fill_RAM(0x00,0x00);	
+	Fill_RAM(0x0000);	
 	Set_Display_On_Off(0x01);
 }
 //一些画画的函数
@@ -741,4 +768,32 @@ void Display_String(unsigned char x, unsigned char y, unsigned char *chr, int Co
     x += 8; //x坐标加8（一个字符x方向占8个点，Y方向占16个点）
     i++;  //下一个字符
   }
+}
+//********************************************//
+//函数名：填充圆
+//*******************************************//
+void Fill_Circle(char x0,char y0,char r,int colour)
+{
+	char i;
+	char a,b;  
+		for(i=1;i<=r;i++)
+	{
+		a=0;b=i;
+		while(a<=b)
+		{
+			Draw_Point(x0-b,y0-a,colour);             //3           
+			Draw_Point(x0+b,y0-a,colour);             //0           
+			Draw_Point(x0-a,y0+b,colour);             //1                
+			Draw_Point(x0-a,y0-b,colour);             //2             
+			Draw_Point(x0+b,y0+a,colour);             //4               
+			Draw_Point(x0+a,y0-b,colour);             //5
+			Draw_Point(x0+a,y0+b,colour);             //6 
+			Draw_Point(x0-b,y0+a,colour);             //7
+			a++;
+			if((a*a+b*b)>(r*r))//判断要画的点是否过远
+			{
+				b--;
+			}
+		}
+	}
 }

@@ -1,7 +1,9 @@
 
 //**********************************************************************//
 void uDelay(long l);
+void kDelay(unsigned char n);
 void Delay(unsigned char n);
+void mDelay(char time);
 void Write_Command(unsigned char Data);
 void Write_Data(unsigned char Data);
 void Set_Column_Address(unsigned char a, unsigned char b);
@@ -27,14 +29,14 @@ void Set_Contrast_Color(unsigned char a, unsigned char b, unsigned char c);
 void Set_Master_Current(unsigned char d);
 void Set_Multiplex_Ratio(unsigned char d);
 void Set_Command_Lock(unsigned char d);
-void Fill_RAM(unsigned char a, unsigned char b);
+void Fill_RAM(int Colour_RGB);
 void Fill_Block(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, unsigned char f);
 void Rainbow();
 void Vertical_Scroll(unsigned char a, unsigned char b, unsigned char c);
 void Horizontal_Scroll(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, unsigned char f);
 void Deactivate_Scroll();
-void Fade_In();
-void Fade_Out();
+void Fade_In(bit time_mode,char time);
+void Fade_Out(bit time_mode,char time);
 void Sleep(unsigned char a);
 void Set_Gray_Scale_Table();
 void Set_Linear_Gray_Scale_Table();
@@ -47,3 +49,4 @@ void Draw_Triangle(int x,int y,int r,int color);
 void Display_Pattern(unsigned char *Pattern_Data, unsigned char Start_x, unsigned char End_x, unsigned char Start_y, unsigned char End_y);
 void Display_Char(unsigned char x, unsigned char y, unsigned char Var_Char, int Colour_RGB);
 void Display_String(unsigned char x, unsigned char y, unsigned char *chr, int Colour_RGB);
+void Fill_Circle(char x0,char y0,char r,int colour);
